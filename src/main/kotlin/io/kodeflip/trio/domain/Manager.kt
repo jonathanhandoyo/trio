@@ -8,6 +8,7 @@ data class Manager(
   @Id
   val id: String?,
   val name: String,
+  val active: Boolean,
   val email: String,
   val provider: Provider
 ) : Actor
