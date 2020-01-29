@@ -2,6 +2,7 @@ package io.kodeflip.trio.routes
 
 import io.kodeflip.trio.ext.getLogger
 import io.kodeflip.trio.routes.handlers.ClientHandler
+import io.kodeflip.trio.routes.handlers.ConversationHandler
 import io.kodeflip.trio.routes.handlers.WebhookHandler
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.router
@@ -9,6 +10,7 @@ import org.springframework.web.reactive.function.server.router
 @Component
 class Mappings(
   private val client: ClientHandler,
+  private val conversation: ConversationHandler,
   private val webhook: WebhookHandler
 ) {
 
@@ -25,6 +27,11 @@ class Mappings(
         logger.info(">> Route configured [/clients/{}]")
         GET("", client::getById)
         DELETE("", client::deactivateById)
+
+        "/conversation".nest {
+          logger.info(">> Route configured [/clients/{}/conversation]")
+          GET("", conversation::getByClient)
+        }
       }
     }
   }
