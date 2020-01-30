@@ -1,7 +1,8 @@
 package io.kodeflip.trio.platforms.rocket
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.kodeflip.trio.ext.convertInnerValue
+import io.kodeflip.trio.ext.liftAndConvertValue
+import io.kodeflip.trio.ext.errorWhen
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
@@ -21,10 +22,11 @@ class Rocket(
       .uri("/api/v1/info")
       .retrieve()
       .bodyToMono<Map<String, Any>>()
-      .map { mapper.convertInnerValue<RcInfo>(it, "info") }
+      .errorWhen { it["success"] != true }
+      .map { mapper.liftAndConvertValue<RcInfo>(it, "info") }
   }
 
-  fun getUserInfo(): Mono<RcUser> {
+  fun getUserInfo(userId: String): Mono<RcUser> {
     return client
       .get()
       .uri { builder ->
@@ -40,6 +42,7 @@ class Rocket(
       }
       .retrieve()
       .bodyToMono<Map<String, Any>>()
-      .map { mapper.convertInnerValue<RcUser>(it, "user") }
+      .errorWhen { it["success"] != true }
+      .map { mapper.liftAndConvertValue<RcUser>(it, "user") }
   }
 }

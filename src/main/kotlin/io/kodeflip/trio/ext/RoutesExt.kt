@@ -12,5 +12,25 @@ fun forbidden() = status(HttpStatus.FORBIDDEN)
 fun internalServerError() = status(HttpStatus.INTERNAL_SERVER_ERROR)
 fun unauthorized() = status(HttpStatus.UNAUTHORIZED)
 
-fun Mono<ServerResponse>.withInternalServerError() = this.onErrorResume { internalServerError().json().bodyValue(it) }
-fun Mono<ServerResponse>.withNotFound() = this.switchIfEmpty { notFound().build() }
+/**
+ * On exception, resumes building the `ServerResponse` with status 500 and JSON-ified exception as its body
+ */
+fun Mono<ServerResponse>.withInternalServerError(): Mono<ServerResponse> {
+  return this
+    .onErrorResume {
+      internalServerError()
+        .json()
+        .bodyValue(it)
+    }
+}
+
+/**
+ * On empty, resumes building the `ServerResponse` with status 404 and empty body
+ */
+fun Mono<ServerResponse>.withNotFound(): Mono<ServerResponse> {
+  return this
+    .switchIfEmpty {
+      notFound()
+        .build()
+    }
+}
