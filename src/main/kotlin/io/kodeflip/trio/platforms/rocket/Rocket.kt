@@ -20,6 +20,9 @@ class Rocket(
     return client
       .get()
       .uri("/api/v1/info")
+      .headers { headers ->
+        headers.set("Accept", "application/json")
+      }
       .retrieve()
       .bodyToMono<Map<String, Any>>()
       .errorWhen { it["success"] != true }
