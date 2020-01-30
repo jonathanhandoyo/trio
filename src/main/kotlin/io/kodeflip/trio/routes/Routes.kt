@@ -19,6 +19,7 @@ class Routes(
 
   @Bean
   fun api(): RouterFunction<ServerResponse> {
+    logger.info(">> Routes configuring...")
     return RouterFunctions.route()
       .add(mappings.clients())
       .add(mappings.webhooks())
