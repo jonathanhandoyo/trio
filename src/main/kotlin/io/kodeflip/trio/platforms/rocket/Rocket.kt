@@ -35,7 +35,7 @@ class Rocket(
       .uri { builder ->
         builder
           .path("/api/v1/users.info")
-          .queryParam("userId", config.userId)
+          .queryParam("userId", userId)
           .build()
       }
       .headers { headers ->
