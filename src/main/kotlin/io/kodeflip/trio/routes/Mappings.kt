@@ -3,7 +3,6 @@ package io.kodeflip.trio.routes
 import io.kodeflip.trio.ext.getLogger
 import io.kodeflip.trio.routes.handlers.ClientHandler
 import io.kodeflip.trio.routes.handlers.ConversationHandler
-import io.kodeflip.trio.routes.handlers.OnboardingHandler
 import io.kodeflip.trio.routes.handlers.WebhookHandler
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.router
@@ -12,7 +11,6 @@ import org.springframework.web.reactive.function.server.router
 class Mappings(
   private val client: ClientHandler,
   private val conversation: ConversationHandler,
-  private val onboarding: OnboardingHandler,
   private val webhook: WebhookHandler
 ) {
 
@@ -24,8 +22,8 @@ class Mappings(
     "/clients".nest {
       logger.info(">> Route configured [/clients]")
       GET("", client::getAll)
-      POST("", onboarding::onboardClient)
-      PUT("", onboarding::onboardPlatform)
+      POST("", client::onboardClient)
+      PUT("", client::onboardPlatform)
 
       "/{client}".nest {
         logger.info(">> Route configured [/clients/{}]")

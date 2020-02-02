@@ -14,7 +14,9 @@ data class Manager(
   val active: Boolean,
   val email: String,
   val provider: Provider
-) : Actor
+) : Actor {
+  fun toRef(): Ref = Ref(id!!, provider)
+}
 
 @Repository
 interface Managers: ReactiveMongoRepository<Manager, String> {

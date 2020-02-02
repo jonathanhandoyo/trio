@@ -17,13 +17,29 @@ class Messaging(
 
   fun process(message: Message): Mono<Boolean> {
     return when (message.source) {
-      Message.Platform.APPLE -> processIncoming(message)
-      Message.Platform.ROCKET -> processOutgoing(message)
-      Message.Platform.WECHAT -> processOutgoing(message)
+      Message.Platform.APPLE -> message.processIncoming()
+      Message.Platform.ROCKET -> message.processOutgoing()
+      Message.Platform.WECHAT -> message.processOutgoing()
     }
   }
 
 
+
+  private fun Message.processOutgoing(): Mono<Boolean> {
+    return this.toMono()
+      .save()
+      .populateManagerAsSender()
+      .populateConversationAsTarget()
+      .thenReturn(true)
+  }
+
+  private fun Message.processIncoming(): Mono<Boolean> {
+    return this.toMono()
+      .save()
+      .populateClientAsSender()
+      .populateClientAsTarget()
+      .thenReturn(true)
+  }
 
   private fun Mono<Message>.save(): Mono<Message> {
     return flatMap { messages.save(it) }
@@ -64,21 +80,5 @@ class Messaging(
         .findByProviderRocket(original.roomId)
         .flatMap { clients.findByConversationId(it.id!!) }
     }
-  }
-
-  private fun processOutgoing(message: Message): Mono<Boolean> {
-    return message.toMono()
-      .save()
-      .populateManagerAsSender()
-      .populateConversationAsTarget()
-      .thenReturn(true)
-  }
-
-  private fun processIncoming(message: Message): Mono<Boolean> {
-    return message.toMono()
-      .save()
-      .populateClientAsSender()
-      .populateClientAsTarget()
-      .thenReturn(true)
   }
 }

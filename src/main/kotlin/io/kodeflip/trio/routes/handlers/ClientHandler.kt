@@ -40,4 +40,7 @@ class ClientHandler(
       .flatMap { ok().json().bodyValue(it) }
       .withStandardFallbacks()
   }
+
+  fun onboardClient(request: ServerRequest): Mono<ServerResponse> = ok().build()
+  fun onboardPlatform(request: ServerRequest): Mono<ServerResponse> = ok().build()
 }
