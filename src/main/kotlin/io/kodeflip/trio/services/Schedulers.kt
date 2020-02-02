@@ -7,11 +7,8 @@ import io.kodeflip.trio.domain.Message
 import io.kodeflip.trio.domain.WechatMessage
 import io.kodeflip.trio.ext.getLogger
 import io.kodeflip.trio.platforms.dmz.Dmz
-import io.kodeflip.trio.platforms.dmz.DmzPayload
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.toMono
 
 @Service
 class Schedulers(
@@ -27,6 +24,8 @@ class Schedulers(
 
   @Scheduled(fixedDelay = 1000)
   fun poll() {
+    if (!dmz.isPolling()) return
+
     dmz
       .getSingle()
       .handle<Message> { payload, sink ->

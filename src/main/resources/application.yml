@@ -9,6 +9,7 @@ management:
 
 dmz:
   url: https://dmz.credit-suisse.com
+  polling: false
 
 rocket:
   url: https://open.rocket.chat

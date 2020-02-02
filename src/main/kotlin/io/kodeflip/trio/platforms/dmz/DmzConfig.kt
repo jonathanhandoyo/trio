@@ -7,4 +7,5 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "dmz")
 class DmzConfig {
   lateinit var url: String
+  lateinit var polling: String
 }

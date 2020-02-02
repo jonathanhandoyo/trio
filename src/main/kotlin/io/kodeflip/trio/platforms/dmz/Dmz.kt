@@ -9,7 +9,7 @@ import reactor.kotlin.core.publisher.toMono
 import java.util.concurrent.atomic.AtomicBoolean
 
 @Service
-class Dmz(config: DmzConfig) {
+class Dmz(private val config: DmzConfig) {
 
   companion object {
     val logger = getLogger<Dmz>()
@@ -33,6 +33,8 @@ class Dmz(config: DmzConfig) {
   }
 
   fun isOk(): Mono<Boolean> = ok.get().toMono()
+
+  fun isPolling(): Boolean = config.polling.toBoolean()
 
   fun getSingle(): Mono<DmzPayload> {
     return client
