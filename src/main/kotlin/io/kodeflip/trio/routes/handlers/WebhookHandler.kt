@@ -2,7 +2,6 @@ package io.kodeflip.trio.routes.handlers
 
 import io.kodeflip.trio.domain.Message
 import io.kodeflip.trio.domain.RocketMessage
-import io.kodeflip.trio.ext.getLogger
 import io.kodeflip.trio.ext.withStandardFallbacks
 import io.kodeflip.trio.services.Messaging
 import org.springframework.stereotype.Component
@@ -17,10 +16,6 @@ import reactor.core.publisher.Mono
 class WebhookHandler(
   private val messaging: Messaging
 ) {
-
-  companion object {
-    private val logger = getLogger<WebhookHandler>()
-  }
 
   fun messageSent(request: ServerRequest): Mono<ServerResponse> {
     return request.bodyToMono<RocketMessage>()

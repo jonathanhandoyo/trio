@@ -16,7 +16,6 @@ class Dmz(private val config: DmzConfig) {
   }
 
   private val client: WebClient = WebClient.create(config.url)
-
   private val ok: AtomicBoolean = AtomicBoolean(true)
 
   private fun <T> Mono<T>.withEmptyOnError(): Mono<T> {
@@ -33,7 +32,6 @@ class Dmz(private val config: DmzConfig) {
   }
 
   fun isOk(): Mono<Boolean> = ok.get().toMono()
-
   fun isPolling(): Boolean = config.polling.toBoolean()
 
   fun getSingle(): Mono<DmzPayload> {
