@@ -23,4 +23,5 @@ data class Conversation(
 @Repository
 interface Conversations: ReactiveMongoRepository<Conversation, String> {
   fun findByClientId(clientId: String): Mono<Conversation>
+  fun findByProviderRocket(rocket: String): Mono<Conversation>
 }

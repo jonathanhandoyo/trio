@@ -12,11 +12,15 @@ data class Client(
   val id: String?,
   val name: String,
   val active: Boolean,
-  val provider: Provider
+  val provider: Provider,
+
+  val conversation: Ref?
 ) : Actor
 
 @Repository
 interface Clients: ReactiveMongoRepository<Client, String> {
   fun findByProviderApple(apple: String): Mono<Client>
   fun findByProviderWechat(wechat: String): Mono<Client>
+
+  fun findByConversationId(conversationId: String): Mono<Client>
 }

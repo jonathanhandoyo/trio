@@ -5,10 +5,12 @@ import io.kodeflip.trio.platforms.rocket.RcMessage
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
+import reactor.util.function.Tuple2
 
 @Service
 class Messaging(
   private val clients: Clients,
+  private val conversations: Conversations,
   private val managers: Managers,
   private val messages: Messages
 ) {
@@ -48,10 +50,27 @@ class Messaging(
     }
   }
 
+  private fun Mono<Message>.populateConversationAsTarget(): Mono<Tuple2<Message, Conversation>> {
+    return zipWhen { message ->
+      val client = message.sender as Client
+      conversations.findByClientId(client.id!!)
+    }
+  }
+
+  private fun Mono<Message>.populateClientAsTarget(): Mono<Tuple2<Message, Client>> {
+    return zipWhen { message ->
+      val original = message.original as RcMessage
+      conversations
+        .findByProviderRocket(original.roomId)
+        .flatMap { clients.findByConversationId(it.id!!) }
+    }
+  }
+
   private fun processOutgoing(message: Message): Mono<Boolean> {
     return message.toMono()
       .save()
       .populateManagerAsSender()
+      .populateConversationAsTarget()
       .thenReturn(true)
   }
 
@@ -59,6 +78,7 @@ class Messaging(
     return message.toMono()
       .save()
       .populateClientAsSender()
+      .populateClientAsTarget()
       .thenReturn(true)
   }
 }
