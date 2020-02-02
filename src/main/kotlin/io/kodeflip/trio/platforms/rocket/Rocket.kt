@@ -1,8 +1,8 @@
 package io.kodeflip.trio.platforms.rocket
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.kodeflip.trio.ext.errorIf
 import io.kodeflip.trio.ext.liftAndConvertValue
-import io.kodeflip.trio.ext.errorWhen
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
@@ -25,7 +25,7 @@ class Rocket(
       }
       .retrieve()
       .bodyToMono<Map<String, Any>>()
-      .errorWhen { it["success"] != true }
+      .errorIf { it["success"] != true }
       .map { mapper.liftAndConvertValue<RcInfo>(it, "info") }
   }
 
@@ -45,7 +45,7 @@ class Rocket(
       }
       .retrieve()
       .bodyToMono<Map<String, Any>>()
-      .errorWhen { it["success"] != true }
+      .errorIf { it["success"] != true }
       .map { mapper.liftAndConvertValue<RcUser>(it, "user") }
   }
 }
