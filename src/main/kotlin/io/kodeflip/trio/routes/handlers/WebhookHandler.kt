@@ -2,8 +2,7 @@ package io.kodeflip.trio.routes.handlers
 
 import io.kodeflip.trio.domain.RocketMessage
 import io.kodeflip.trio.ext.getLogger
-import io.kodeflip.trio.ext.withInternalServerError
-import io.kodeflip.trio.ext.withNotFound
+import io.kodeflip.trio.ext.withStandardFallbacks
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
@@ -22,14 +21,12 @@ class WebhookHandler {
   fun messageSent(request: ServerRequest): Mono<ServerResponse> {
     return request.bodyToMono<RocketMessage>()
       .flatMap { ok().json().bodyValue(it) }
-      .withNotFound()
-      .withInternalServerError()
+      .withStandardFallbacks()
   }
 
   fun userCreated(request: ServerRequest): Mono<ServerResponse> {
     return request.bodyToMono<RocketMessage>()
       .flatMap { ok().json().bodyValue(it) }
-      .withNotFound()
-      .withInternalServerError()
+      .withStandardFallbacks()
   }
 }

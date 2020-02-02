@@ -1,8 +1,7 @@
 package io.kodeflip.trio.routes.handlers
 
 import io.kodeflip.trio.domain.Clients
-import io.kodeflip.trio.ext.withInternalServerError
-import io.kodeflip.trio.ext.withNotFound
+import io.kodeflip.trio.ext.withStandardFallbacks
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
@@ -18,15 +17,13 @@ class ClientHandler(
   fun getAll(request: ServerRequest): Mono<ServerResponse> {
     return clients.findAll().collectList()
       .flatMap { ok().json().bodyValue(it) }
-      .withNotFound()
-      .withInternalServerError()
+      .withStandardFallbacks()
   }
 
   fun getById(request: ServerRequest): Mono<ServerResponse> {
     return clients.findById(request.pathVariable("client"))
       .flatMap { ok().json().bodyValue(it) }
-      .withNotFound()
-      .withInternalServerError()
+      .withStandardFallbacks()
   }
 
   fun deactivateById(request: ServerRequest): Mono<ServerResponse> {
@@ -34,7 +31,6 @@ class ClientHandler(
       .map { it.copy(active = false) }
       .flatMap { clients.save(it) }
       .flatMap { ok().json().bodyValue(it) }
-      .withNotFound()
-      .withInternalServerError()
+      .withStandardFallbacks()
   }
 }
