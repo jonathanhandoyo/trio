@@ -21,7 +21,7 @@ class Dmz(config: DmzConfig) {
 
   private fun <T> Mono<T>.withEmptyOnError(): Mono<T> {
     return onErrorResume {
-      logger.error(it.message, it)
+      logger.error("{} : {}", it.javaClass, it.message)
       Mono.empty<T>()
     }
   }

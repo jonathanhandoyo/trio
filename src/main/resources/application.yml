@@ -7,6 +7,9 @@ management:
       exposure:
         include: "*"
 
+dmz:
+  url: https://dmz.credit-suisse.com
+
 rocket:
   url: https://open.rocket.chat
   user-id: iBanKyDbcd7x3nWkv

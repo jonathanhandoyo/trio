@@ -11,7 +11,12 @@ class DmzHealthIndicator(private val dmz: Dmz) : ReactiveHealthIndicator {
 
   override fun health(): Mono<Health> {
     return dmz.isOk()
-      .map { Health.up().withDetail("ok", it).build() }
+      .map {
+        when (it) {
+          true -> Health.up().withDetail("ok", it).build()
+          else -> Health.down().withDetail("ok", it).build()
+        }
+      }
       .onErrorResume { Health.down().withException(it).build().toMono() }
   }
 }

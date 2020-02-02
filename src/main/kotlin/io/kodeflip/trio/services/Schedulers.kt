@@ -27,7 +27,6 @@ class Schedulers(
 
   @Scheduled(fixedDelay = 1000)
   fun poll() {
-    logger.info(">> Schedulers >> poll...")
     dmz
       .getSingle()
       .handle<Message> { payload, sink ->
