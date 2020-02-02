@@ -13,6 +13,16 @@ class Messaging(
   private val messages: Messages
 ) {
 
+  fun process(message: Message): Mono<Boolean> {
+    return when (message.source) {
+      Message.Platform.APPLE -> processIncoming(message)
+      Message.Platform.ROCKET -> processOutgoing(message)
+      Message.Platform.WECHAT -> processOutgoing(message)
+    }
+  }
+
+
+
   private fun Mono<Message>.save(): Mono<Message> {
     return flatMap { messages.save(it) }
   }
@@ -50,13 +60,5 @@ class Messaging(
       .save()
       .populateClientAsSender()
       .thenReturn(true)
-  }
-
-  fun process(message: Message): Mono<Boolean> {
-    return when (message.source) {
-      Message.Platform.APPLE -> processIncoming(message)
-      Message.Platform.ROCKET -> processOutgoing(message)
-      Message.Platform.WECHAT -> processOutgoing(message)
-    }
   }
 }
