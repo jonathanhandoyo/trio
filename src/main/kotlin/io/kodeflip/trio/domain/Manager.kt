@@ -2,6 +2,9 @@ package io.kodeflip.trio.domain
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
+import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
 
 @Document
 data class Manager(
@@ -12,3 +15,8 @@ data class Manager(
   val email: String,
   val provider: Provider
 ) : Actor
+
+@Repository
+interface Managers: ReactiveMongoRepository<Manager, String> {
+  fun findByProviderRocket(rocket: String): Mono<Manager>
+}

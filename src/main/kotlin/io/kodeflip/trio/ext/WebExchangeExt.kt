@@ -14,6 +14,11 @@ import reactor.kotlin.core.publisher.toMono
 
 /**
  * Switches to `Mono.error<T>()` signal when predicate evaluates to `true`.
+ *
+ * @param T type of incoming signal
+ * @param predicate predicate to evaluate
+ *
+ * @return passes element of type T when predicate evaluates to `false`
  */
 fun <T> Mono<T>.errorIf(predicate: (T) -> Boolean): Mono<T> =
   handle { t, sink ->
@@ -22,7 +27,6 @@ fun <T> Mono<T>.errorIf(predicate: (T) -> Boolean): Mono<T> =
       else -> sink.next(t)
     }
   }
-
 
 /**
  * Filters the request for `X-Trio-Requestor` header, otherwise throws `ForbiddenException`
@@ -47,13 +51,14 @@ fun Mono<ServerRequest>.withUnauthorizedFilter(): Mono<ServerRequest> =
   }
 
 /**
- * Compounds standard filter strategy
+ * Compounds standard filter strategy. Includes:
+ * * filter for Unauthorized
+ * * filter for Forbidden
  */
 fun ServerRequest.withStandardFilters(): Mono<ServerRequest> =
   this.toMono()
     .withUnauthorizedFilter() //401
     .withForbiddenFilter() //403
-
 
 private class ForbiddenException : ResponseStatusException(HttpStatus.FORBIDDEN)
 private class UnauthorizedException : ResponseStatusException(HttpStatus.UNAUTHORIZED)
@@ -102,7 +107,11 @@ fun Mono<ServerResponse>.withUnauthorizedFallback() =
   }
 
 /**
- * Compounds standard execution strategy for non-positive results
+ * Compounds standard execution strategy for non-positive results. Includes:
+ * * Fallback for `Unauthorized` response
+ * * Fallback for `Forbidden` response
+ * * Fallback for `NotFound` response
+ * * Fallback for `InternalServerError` response
  */
 fun Mono<ServerResponse>.withStandardFallbacks(): Mono<ServerResponse> =
   this

@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
 
 @Document
 data class Client(
@@ -15,4 +16,7 @@ data class Client(
 ) : Actor
 
 @Repository
-interface Clients: ReactiveMongoRepository<Client, String>
+interface Clients: ReactiveMongoRepository<Client, String> {
+  fun findByProviderApple(apple: String): Mono<Client>
+  fun findByProviderWechat(wechat: String): Mono<Client>
+}
