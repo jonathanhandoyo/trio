@@ -10,11 +10,11 @@ import reactor.kotlin.core.publisher.toMono
 class DmzHealthIndicator(private val dmz: Dmz) : ReactiveHealthIndicator {
 
   override fun health(): Mono<Health> {
-    return dmz.isOk()
+    return dmz.isHealthy()
       .map {
         when (it) {
-          true -> Health.up().withDetail("ok", it).build()
-          else -> Health.down().withDetail("ok", it).build()
+          true -> Health.up().withDetail("healthy", it).build()
+          else -> Health.down().withDetail("healthy", it).build()
         }
       }
       .onErrorResume { Health.down().withException(it).build().toMono() }

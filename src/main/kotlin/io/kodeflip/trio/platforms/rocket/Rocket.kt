@@ -3,18 +3,21 @@ package io.kodeflip.trio.platforms.rocket
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kodeflip.trio.ext.errorIf
 import io.kodeflip.trio.ext.liftAndConvertValue
+import io.kodeflip.trio.platforms.Platform
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.core.publisher.Mono
+import java.util.concurrent.atomic.AtomicBoolean
 
 @Service
 class Rocket(
   private val config: RocketConfig,
   private val mapper: ObjectMapper
-) {
+): Platform {
 
-  private val client: WebClient = WebClient.create(config.url)
+  override val client: WebClient = WebClient.create(config.url)
+  override val health: AtomicBoolean = AtomicBoolean(true)
 
   fun getInfo(): Mono<RcInfo> {
     return client
@@ -27,6 +30,7 @@ class Rocket(
       .bodyToMono<Map<String, Any>>()
       .errorIf { it["success"] != true }
       .map { mapper.liftAndConvertValue<RcInfo>(it, "info") }
+      .withHealthSwitch()
   }
 
   fun getUserInfo(userId: String): Mono<RcUser> {
@@ -47,5 +51,6 @@ class Rocket(
       .bodyToMono<Map<String, Any>>()
       .errorIf { it["success"] != true }
       .map { mapper.liftAndConvertValue<RcUser>(it, "user") }
+      .withHealthSwitch()
   }
 }

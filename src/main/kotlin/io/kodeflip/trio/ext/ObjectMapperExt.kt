@@ -15,5 +15,5 @@ import com.fasterxml.jackson.module.kotlin.convertValue
  * @throws IllegalStateException when the `key` is not present
  */
 inline fun <reified T> ObjectMapper.liftAndConvertValue(map: Map<String, Any>, key: String): T {
-  return this.convertValue<T>(map[key] ?: throw IllegalArgumentException(""""$key" not present"""))
+  return this.convertValue(map[key] ?: throw IllegalArgumentException(""""$key" not present"""))
 }
