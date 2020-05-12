@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.onErrorResume
 import reactor.kotlin.core.publisher.switchIfEmpty
 import reactor.kotlin.core.publisher.toMono
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Switches to `Mono.error<T>()` signal when predicate evaluates to `true`.
@@ -108,10 +109,10 @@ fun Mono<ServerResponse>.withUnauthorizedFallback() =
 
 /**
  * Compounds standard execution strategy for non-positive results. Includes:
- * * Fallback for `Unauthorized` response
- * * Fallback for `Forbidden` response
- * * Fallback for `NotFound` response
- * * Fallback for `InternalServerError` response
+ * * Fallback for `401-Unauthorized` response
+ * * Fallback for `403-Forbidden` response
+ * * Fallback for `404-NotFound` response
+ * * Fallback for `500-InternalServerError` response
  */
 fun Mono<ServerResponse>.withStandardFallbacks(): Mono<ServerResponse> =
   this

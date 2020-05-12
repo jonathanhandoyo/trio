@@ -18,31 +18,33 @@ class Mappings(
     private val logger = getLogger<Mappings>()
   }
 
-  fun clients() = router {
-    "/clients".nest {
-      logger.info(">> Route configured [/clients]")
-      GET("", client::getAll)
-      POST("", client::onboardClient)
-      PUT("", client::onboardPlatform)
+  fun clients() =
+    router {
+      "/clients".nest {
+        logger.info(">> Route configured [/clients]")
+        GET("", client::getAll)
+        POST("", client::onboardClient)
+        PUT("", client::onboardPlatform)
 
-      "/{client}".nest {
-        logger.info(">> Route configured [/clients/{}]")
-        GET("", client::getById)
-        DELETE("", client::deactivateById)
+        "/{client}".nest {
+          logger.info(">> Route configured [/clients/{}]")
+          GET("", client::getById)
+          DELETE("", client::deactivateById)
 
-        "/conversation".nest {
-          logger.info(">> Route configured [/clients/{}/conversation]")
-          GET("", conversation::getByClient)
+          "/conversation".nest {
+            logger.info(">> Route configured [/clients/{}/conversation]")
+            GET("", conversation::getByClient)
+          }
         }
       }
     }
-  }
 
-  fun webhooks() = router {
-    "/webhooks".nest {
-      logger.info(">> Route configured [/webhook]")
-      POST("message-sent", webhook::messageSent)
-      POST("user-created", webhook::userCreated)
+  fun webhooks() =
+    router {
+      "/webhooks".nest {
+        logger.info(">> Route configured [/webhook]")
+        POST("message-sent", webhook::messageSent)
+        POST("user-created", webhook::userCreated)
+      }
     }
-  }
 }

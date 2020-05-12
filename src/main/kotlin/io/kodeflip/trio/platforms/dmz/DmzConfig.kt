@@ -1,11 +1,11 @@
 package io.kodeflip.trio.platforms.dmz
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Configuration
+import org.springframework.boot.context.properties.ConstructorBinding
 
-@Configuration
+@ConstructorBinding
 @ConfigurationProperties(prefix = "dmz")
-class DmzConfig {
-  lateinit var url: String
-  lateinit var polling: String
-}
+data class DmzConfig(
+  val url: String,
+  val polling: String
+)

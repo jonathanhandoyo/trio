@@ -17,12 +17,11 @@ class ConversationHandler(
   private val conversations: Conversations
 ) {
 
-  fun getByClient(request: ServerRequest): Mono<ServerResponse> {
-    return request
+  fun getByClient(request: ServerRequest): Mono<ServerResponse> =
+    request
       .withStandardFilters()
       .flatMap { clients.findById(it.pathVariable("client")) }
       .flatMap { conversations.findByClientId(it.id!!) }
       .flatMap { ok().json().bodyValue(it) }
       .withStandardFallbacks()
-  }
 }

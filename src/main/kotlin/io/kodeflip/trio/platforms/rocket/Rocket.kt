@@ -19,8 +19,8 @@ class Rocket(
   override val client: WebClient = WebClient.create(config.url)
   override val health: AtomicBoolean = AtomicBoolean(true)
 
-  fun getInfo(): Mono<RcInfo> {
-    return client
+  fun getInfo(): Mono<RcInfo> =
+    client
       .get()
       .uri("/api/v1/info")
       .headers { headers ->
@@ -31,10 +31,9 @@ class Rocket(
       .errorIf { it["success"] != true }
       .map { mapper.liftAndConvertValue<RcInfo>(it, "info") }
       .withHealthSwitch()
-  }
 
-  fun getUserInfo(userId: String): Mono<RcUser> {
-    return client
+  fun getUserInfo(userId: String): Mono<RcUser> =
+    client
       .get()
       .uri { builder ->
         builder
@@ -52,5 +51,4 @@ class Rocket(
       .errorIf { it["success"] != true }
       .map { mapper.liftAndConvertValue<RcUser>(it, "user") }
       .withHealthSwitch()
-  }
 }

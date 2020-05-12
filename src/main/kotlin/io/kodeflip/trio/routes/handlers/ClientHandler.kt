@@ -15,31 +15,28 @@ class ClientHandler(
   private val clients: Clients
 ) {
 
-  fun getAll(request: ServerRequest): Mono<ServerResponse> {
-    return request
+  fun getAll(request: ServerRequest): Mono<ServerResponse> =
+    request
       .withStandardFilters()
       .flatMap { clients.findAll().collectList() }
       .flatMap { ok().json().bodyValue(it) }
       .withStandardFallbacks()
-  }
 
-  fun getById(request: ServerRequest): Mono<ServerResponse> {
-    return request
+  fun getById(request: ServerRequest): Mono<ServerResponse> =
+    request
       .withStandardFilters()
       .flatMap { clients.findById(it.pathVariable("client")) }
       .flatMap { ok().json().bodyValue(it) }
       .withStandardFallbacks()
-  }
 
-  fun deactivateById(request: ServerRequest): Mono<ServerResponse> {
-    return request
+  fun deactivateById(request: ServerRequest): Mono<ServerResponse> =
+    request
       .withStandardFilters()
       .flatMap { clients.findById(it.pathVariable("client")) }
       .map { it.copy(active = false) }
       .flatMap { clients.save(it) }
       .flatMap { ok().json().bodyValue(it) }
       .withStandardFallbacks()
-  }
 
   fun onboardClient(request: ServerRequest): Mono<ServerResponse> = ok().build()
   fun onboardPlatform(request: ServerRequest): Mono<ServerResponse> = ok().build()

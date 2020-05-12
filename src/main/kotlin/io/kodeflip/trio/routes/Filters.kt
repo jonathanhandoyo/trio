@@ -11,10 +11,7 @@ import java.time.Instant
 
 @Component
 class Filters {
-
-  companion object {
-    private val logger = getLogger<Filters>()
-  }
+  private val logger = getLogger<Filters>()
 
   fun logging(): (ServerRequest, HandlerFunction<ServerResponse>) -> Mono<ServerResponse> {
     logger.info(">> Filter configured [Logging]")

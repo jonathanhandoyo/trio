@@ -17,16 +17,14 @@ class WebhookHandler(
   private val messaging: Messaging
 ) {
 
-  fun messageSent(request: ServerRequest): Mono<ServerResponse> {
-    return request.bodyToMono<RcMessage>()
+  fun messageSent(request: ServerRequest): Mono<ServerResponse> =
+    request.bodyToMono<RcMessage>()
       .flatMap { messaging.process(Message(it)) }
       .flatMap { ok().json().bodyValue(it) }
       .withStandardFallbacks()
-  }
 
-  fun userCreated(request: ServerRequest): Mono<ServerResponse> {
-    return request.bodyToMono<RcMessage>()
+  fun userCreated(request: ServerRequest): Mono<ServerResponse> =
+    request.bodyToMono<RcMessage>()
       .flatMap { ok().json().bodyValue(it) }
       .withStandardFallbacks()
-  }
 }

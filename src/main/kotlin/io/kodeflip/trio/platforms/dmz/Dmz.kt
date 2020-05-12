@@ -1,6 +1,5 @@
 package io.kodeflip.trio.platforms.dmz
 
-import io.kodeflip.trio.ext.getLogger
 import io.kodeflip.trio.ext.withEmptyOnError
 import io.kodeflip.trio.platforms.Platform
 import org.springframework.stereotype.Service
@@ -12,10 +11,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 @Service
 class Dmz(private val config: DmzConfig): Platform {
-
-  companion object {
-    val logger = getLogger<Dmz>()
-  }
 
   override val client: WebClient = WebClient.create(config.url)
   override val health: AtomicBoolean = AtomicBoolean(true)

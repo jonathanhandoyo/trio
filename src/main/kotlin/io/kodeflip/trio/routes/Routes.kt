@@ -1,6 +1,5 @@
 package io.kodeflip.trio.routes
 
-import io.kodeflip.trio.ext.getLogger
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.server.RouterFunction
@@ -13,17 +12,11 @@ class Routes(
   private val mappings: Mappings
 ) {
 
-  companion object {
-    private val logger = getLogger<Routes>()
-  }
-
   @Bean
-  fun api(): RouterFunction<ServerResponse> {
-    logger.info(">> Routes configuring...")
-    return RouterFunctions.route()
+  fun api(): RouterFunction<ServerResponse> =
+    RouterFunctions.route()
       .add(mappings.clients())
       .add(mappings.webhooks())
       .filter(filters.logging())
       .build()
-  }
 }
