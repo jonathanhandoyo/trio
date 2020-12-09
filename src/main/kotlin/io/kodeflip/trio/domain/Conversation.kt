@@ -18,9 +18,7 @@ data class Conversation(
   val tls: List<Manager>?,
   val ics: List<Manager>?,
   val dacs: List<Manager>?
-) {
-  fun toRef(): Ref = Ref(id!!, provider)
-}
+)
 
 @Repository
 interface Conversations: ReactiveMongoRepository<Conversation, String> {

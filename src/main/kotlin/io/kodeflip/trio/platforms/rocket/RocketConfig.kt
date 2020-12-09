@@ -1,9 +1,9 @@
 package io.kodeflip.trio.platforms.rocket
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Configuration
+import org.springframework.boot.context.properties.ConstructorBinding
 
-@Configuration
+@ConstructorBinding
 @ConfigurationProperties(prefix = "rocket")
 class RocketConfig {
   lateinit var url: String

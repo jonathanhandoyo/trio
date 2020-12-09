@@ -15,9 +15,7 @@ data class Client(
   val provider: Provider,
 
   val conversation: Ref?
-) : Actor {
-  fun toRef(): Ref = Ref(id!!, provider)
-}
+) : Actor
 
 @Repository
 interface Clients: ReactiveMongoRepository<Client, String> {

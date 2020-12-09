@@ -1,11 +1,6 @@
 management:
-  endpoint:
-    health:
-      show-details: always
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+  endpoint.health.show-details: always
+  endpoints.web.exposure.include: "*"
 
 dmz:
   url: https://dmz.credit-suisse.com
@@ -16,7 +11,4 @@ rocket:
   user-id: iBanKyDbcd7x3nWkv
   auth-token: gR33YJDTMSnLg2ObeJdX7950X8AL2JgO3aARNHUqIT8
 
-spring:
-  data:
-    mongodb:
-      uri: mongodb+srv://admin:admin@triokluster-tk1kx.mongodb.net/test?retryWrites=true&w=majority
+spring.data.mongodb.uri: mongodb+srv://admin:admin@triokluster-tk1kx.mongodb.net/test?retryWrites=true&w=majority
